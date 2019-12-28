@@ -76,13 +76,13 @@ void segLight(byte digit, byte seg, byte col){
   //seg calls a segment (1-9).
   //col is color.  0 = off, 25 = white.  All else (1-24) is a fraction (1/15) of the colour wheel.
   byte endPixel = (seg * LEDS_PER_SEG);
-  byte beginPixel = (ld_endPixel - LEDS_PER_SEG);
+  byte beginPixel = (endPixel - LEDS_PER_SEG);
 
   convertColourVal(col);
 
 
   //This Code will work with both single Pixel and multiple pixel segments, but will require a loop for each board, and any dots.
-  for(int i=ld_beginPixel; i<ld_endPixel; i++){
+  for(int i=ld_beginPixel; i<endPixel; i++){
     testStrip[digit][i] = CHSV( hueInt, satInt, valInt);
   }
 }
