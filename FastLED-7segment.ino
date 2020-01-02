@@ -11,8 +11,8 @@ bool debugOn = true;
 const byte NUM_DIGITS = 2;
 const byte LEDS_PER_SEG = 2;
 const byte LEDS_PER_DIGIT = (LEDS_PER_SEG * 7);
-const byte PIN0 = 22;
-const byte PIN1 = 24;
+const byte LED_PIN_1 = 22;
+const byte LED_PIN_2 = 24;
 
 
 //Initial HSV Values.  Used to set the values later
@@ -47,8 +47,8 @@ void setup() {
 
   //Set up the strips to an array of arrays.
   if(debugOn) Serial.println("DEBUG: Initialising Strips");
-  FastLED.addLeds<WS2812B, PIN0, GRB>(testStrip[0], LEDS_PER_DIGIT); 
-  FastLED.addLeds<WS2812B, PIN1, GRB>(testStrip[1], LEDS_PER_DIGIT);
+  FastLED.addLeds<WS2812B, LED_PIN_1, GRB>(testStrip[0], LEDS_PER_DIGIT); 
+  FastLED.addLeds<WS2812B, LED_PIN_2, GRB>(testStrip[1], LEDS_PER_DIGIT);
   //If you have more digits - these will need to be set here, one by one!
   
   delay(15); //Settle the LEDs.  There was some funny business going on before this was set.
@@ -82,7 +82,7 @@ void segLight(byte digit, byte seg, byte col){
 
 
   //This Code will work with both single Pixel and multiple pixel segments, but will require a loop for each board, and any dots.
-  for(int i=ld_beginPixel; i<endPixel; i++){
+  for(int i=beginPixel; i<endPixel; i++){
     testStrip[digit][i] = CHSV( hueInt, satInt, valInt);
   }
 }
@@ -194,15 +194,13 @@ void rainbowFromWhite(byte waitWhite, byte waitColour, byte finalWait){
   if (debugOn) Serial.println("DEBUG: Called rainbowFromWhite.");
   for(byte s;s<255;s++){
     if(debugOn) {Serial.print("DEBUG: s="); Serial.println(s);}
-    fill_solid(testStrip,LEDS_PER_DIGIT,CHSV(0,s,128));
-    fill_solid(ultraHighDensity,UHD_LEDS_PER_DIGIT,CHSV(0,s,128));
+    fill_solid(testStrip[0],LEDS_PER_DIGIT,CHSV(0,s,128));
     FastLED.show();
     FastLED.delay(waitWhite);
   }
   for(byte c;c<255;c++){
     if(debugOn) {Serial.print("DEBUG: c="); Serial.println(c);}
-    fill_solid( testStrip, LEDS_PER_DIGIT, CHSV(c,255,128) );
-    fill_solid( ultraHighDensity, UHD_LEDS_PER_DIGIT, CHSV(c,255,128) );
+    fill_solid(testStrip[0], LEDS_PER_DIGIT, CHSV(c,255,128) );
     FastLED.show();
     FastLED.delay(waitColour);
   }
@@ -214,15 +212,13 @@ void rainbowToWhite(byte waitColour, byte waitWhite, byte finalWait){
   if (debugOn) Serial.println("DEBUG: Called rainbowToWhite.");
   for(byte c=255;c>0;c--){
     if(debugOn) {Serial.print("DEBUG: c="); Serial.println(c);}
-    fill_solid( lowDensity, LEDS_PER_DIGIT, CHSV(c,255,255) );
-    fill_solid( ultraHighDensity, UHD_LEDS_PER_DIGIT, CHSV(c,255,255) );
+    fill_solid(testStrip[0], LEDS_PER_DIGIT, CHSV(c,255,255) );
     FastLED.show();
     FastLED.delay(waitColour);
   }
   for(byte s=255;s>0;s--){
     if(debugOn) {Serial.print("DEBUG: s="); Serial.println(s);}
-    fill_solid(lowDensity,LEDS_PER_DIGIT,CHSV(255,s,255));
-    fill_solid(ultraHighDensity,UHD_LEDS_PER_DIGIT,CHSV(255,s,255));
+    fill_solid(testStrip[0],LEDS_PER_DIGIT,CHSV(255,s,255));
     FastLED.show();
     FastLED.delay(waitWhite);
   }
